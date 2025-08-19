@@ -94,11 +94,13 @@ export function getDownloadBaseUrl(): string {
  */
 export async function login(username: string, password: string): Promise<LoginResponse> {
   const apiBaseUrl = getApiBaseUrl();
+  const alistBaseUrl = getAlistBaseUrl();
   
   const response = await fetch(`${apiBaseUrl}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'X-Alist-Base-Url': alistBaseUrl, // 添加Alist服务器地址到请求头
     },
     body: JSON.stringify({
       username,
@@ -128,10 +130,12 @@ export async function login(username: string, password: string): Promise<LoginRe
 export async function getFileList(params: ListParams): Promise<ListResponse> {
   const { path, password, page = 1, per_page = config.defaultPageSize, refresh = false } = params;
   const apiBaseUrl = getApiBaseUrl();
+  const alistBaseUrl = getAlistBaseUrl();
   const token = getToken();
   
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'X-Alist-Base-Url': alistBaseUrl, // 添加Alist服务器地址到请求头
   };
   
   // 如果有token，添加到请求头
@@ -180,10 +184,12 @@ export async function getFileList(params: ListParams): Promise<ListResponse> {
 export async function getFileDownloadUrl(path: string, password?: string): Promise<string> {
   const apiBaseUrl = getApiBaseUrl();
   const downloadBaseUrl = getDownloadBaseUrl();
+  const alistBaseUrl = getAlistBaseUrl();
   const token = getToken();
   
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'X-Alist-Base-Url': alistBaseUrl, // 添加Alist服务器地址到请求头
   };
   
   // 如果有token，添加到请求头
