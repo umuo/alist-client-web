@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alist客户端
 
-## Getting Started
+这是一个使用Next.js开发的Alist客户端，可以浏览和下载Alist服务器上的文件。
 
-First, run the development server:
+## 功能特点
 
+- **配置管理**：可以设置Alist服务器的baseUrl
+- **用户认证**：支持用户登录Alist账号（当需要时）
+- **文件列表**：显示文件和文件夹，支持文件夹导航
+- **路径导航**：面包屑导航，显示当前路径
+- **文件下载**：支持直接下载文件
+- **密码保护**：支持输入密码访问受保护的文件夹
+- **自适应认证**：能够自动适应需要登录和不需要登录的Alist实例
+
+## 技术栈
+
+- Next.js 14
+- React
+- TypeScript
+- Tailwind CSS
+
+## 安装与运行
+
+1. 克隆仓库
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <仓库地址>
+cd alist-client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 安装依赖
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. 配置环境变量
+创建`.env.local`文件，设置Alist服务器地址：
+```
+NEXT_PUBLIC_ALIST_BASE_URL=http://localhost:5244
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. 启动开发服务器
+```bash
+npm run dev
+```
 
-## Learn More
+5. 访问应用
+打开浏览器，访问 [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## 使用说明
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. 首次访问时，会弹出配置窗口，您需要输入Alist服务器的地址
+2. 如果Alist服务器需要登录，点击右上角的"登录"按钮
+3. 浏览文件列表，点击文件夹进入，点击文件可以下载
+4. 如果需要修改服务器地址，可以点击右上角的"配置"按钮
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 版本历史
 
-## Deploy on Vercel
+- v1.0.0 - 初始版本，实现文件列表和下载功能
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 未来计划
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 文件预览功能
+- 文件上传功能
+- 文件搜索功能
+- 多视图模式（列表、网格等）
+- 文件排序功能
+- 暗黑模式
+- 移动端适配
+
+## 许可证
+
+MIT
