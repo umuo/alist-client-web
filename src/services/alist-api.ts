@@ -64,12 +64,26 @@ export function clearToken(): void {
   }
 }
 
-// 获取当前baseUrl
-export function getBaseUrl(): string {
+// 获取当前Alist服务器baseUrl
+export function getAlistBaseUrl(): string {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('alist_base_url') || config.baseUrl;
   }
   return config.baseUrl;
+}
+
+// 获取API代理baseUrl
+export function getApiBaseUrl(): string {
+  // 使用当前域名下的API代理
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/api/alist`;
+  }
+  return '/api/alist';
+}
+
+// 获取下载baseUrl（直接使用Alist服务器地址，不经过代理）
+export function getDownloadBaseUrl(): string {
+  return getAlistBaseUrl();
 }
 
 /**
@@ -79,9 +93,9 @@ export function getBaseUrl(): string {
  * @returns 登录响应
  */
 export async function login(username: string, password: string): Promise<LoginResponse> {
-  const baseUrl = getBaseUrl();
+  const apiBaseUrl = getApiBaseUrl();
   
-  const response = await fetch(`${baseUrl}${config.apiPrefix}/auth/login`, {
+  const response = await fetch(`${apiBaseUrl}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +127,7 @@ export async function login(username: string, password: string): Promise<LoginRe
  */
 export async function getFileList(params: ListParams): Promise<ListResponse> {
   const { path, password, page = 1, per_page = config.defaultPageSize, refresh = false } = params;
-  const baseUrl = getBaseUrl();
+  const apiBaseUrl = getApiBaseUrl();
   const token = getToken();
   
   const headers: Record<string, string> = {
@@ -125,7 +139,7 @@ export async function getFileList(params: ListParams): Promise<ListResponse> {
     headers['Authorization'] = token;
   }
   
-  const response = await fetch(`${baseUrl}${config.apiPrefix}/fs/list`, {
+  const response = await fetch(`${apiBaseUrl}/fs/list`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -164,7 +178,8 @@ export async function getFileList(params: ListParams): Promise<ListResponse> {
  * @returns 下载链接
  */
 export async function getFileDownloadUrl(path: string, password?: string): Promise<string> {
-  const baseUrl = getBaseUrl();
+  const apiBaseUrl = getApiBaseUrl();
+  const downloadBaseUrl = getDownloadBaseUrl();
   const token = getToken();
   
   const headers: Record<string, string> = {
@@ -176,7 +191,7 @@ export async function getFileDownloadUrl(path: string, password?: string): Promi
     headers['Authorization'] = token;
   }
   
-  const response = await fetch(`${baseUrl}${config.apiPrefix}/fs/get`, {
+  const response = await fetch(`${apiBaseUrl}/fs/get`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -194,7 +209,8 @@ export async function getFileDownloadUrl(path: string, password?: string): Promi
     throw new Error(`获取下载链接失败: ${data.message}`);
   }
 
-  return `${baseUrl}/d${path}?sign=${data.data.sign}`;
+  // 使用原始Alist服务器地址构建下载链接，不经过代理
+  return `${downloadBaseUrl}/d${path}?sign=${data.data.sign}`;
 }
 
 /**
@@ -202,11 +218,11 @@ export async function getFileDownloadUrl(path: string, password?: string): Promi
  * @param path 文件路径
  */
 export function downloadFile(path: string, filename: string): void {
-  const baseUrl = getBaseUrl();
+  const downloadBaseUrl = getDownloadBaseUrl();
   const token = getToken();
   
   const link = document.createElement('a');
-  let url = `${baseUrl}/d${path}`;
+  let url = `${downloadBaseUrl}/d${path}`;
   
   // 如果有token，添加到URL
   if (token) {

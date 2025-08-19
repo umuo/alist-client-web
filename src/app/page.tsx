@@ -6,12 +6,12 @@ import FileList from '@/components/FileList';
 import ConfigForm from '@/components/ConfigForm';
 import LoginForm from '@/components/LoginForm';
 import { config } from '@/config';
-import { getBaseUrl, isLoggedIn, logout } from '@/services/alist-api';
+import { getAlistBaseUrl, isLoggedIn, logout } from '@/services/alist-api';
 
 export default function Home() {
   const [showConfig, setShowConfig] = useState<boolean>(false);
   const [showLogin, setShowLogin] = useState<boolean>(false);
-  const [baseUrl, setBaseUrl] = useState<string>(config.baseUrl);
+  const [baseUrl, setBaseUrl] = useState<string>(getAlistBaseUrl());
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const path = searchParams.get('path') || '/';

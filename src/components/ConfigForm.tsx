@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { config } from '@/config';
+import { getAlistBaseUrl } from '@/services/alist-api';
 
 interface ConfigFormProps {
   onSave: (baseUrl: string) => void;
@@ -9,7 +10,7 @@ interface ConfigFormProps {
 }
 
 export default function ConfigForm({ onSave, onClose }: ConfigFormProps) {
-  const [baseUrl, setBaseUrl] = useState<string>(config.baseUrl);
+  const [baseUrl, setBaseUrl] = useState<string>(getAlistBaseUrl());
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   // 从localStorage加载配置
